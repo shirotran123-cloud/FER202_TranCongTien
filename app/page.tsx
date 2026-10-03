@@ -2,37 +2,14 @@ import React from "react";
 import Link from "next/link";
 import { products } from "@/data/products";
 import { ProductCard } from "@/components/ProductCard";
+import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { ShoppingBag, Zap, ShieldCheck } from "lucide-react";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-slate-50 font-sans">
-      {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-slate-200/60 bg-white/80 backdrop-blur-md">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2 group cursor-pointer">
-            <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-2 rounded-xl group-hover:scale-105 transition-transform">
-              <ShoppingBag className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
-              TechStore
-            </span>
-          </div>
-          <nav className="flex items-center gap-3 sm:gap-4">
-            <Link href="/login" passHref legacyBehavior>
-              <Button data-testid="btn-login" variant="ghost" className="font-semibold text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 transition-colors">
-                Log in
-              </Button>
-            </Link>
-            <Link href="/register" passHref legacyBehavior>
-              <Button data-testid="btn-register" className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-md hover:shadow-lg transition-all rounded-full px-6">
-                Sign up
-              </Button>
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <Header />
 
       {/* Hero Section */}
       <section className="relative pt-20 pb-28 lg:pt-32 lg:pb-40 overflow-hidden">

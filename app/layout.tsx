@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   description: "Next.js project setup for FER202 Lab 2",
 };
 
+import { AuthProvider } from "@/contexts/AuthContext";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -18,7 +20,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={cn("font-sans", inter.variable)}>
       <body className={inter.className}>
-        {children} 
+        <AuthProvider>
+          {children} 
+        </AuthProvider>
       </body>
     </html>
   );

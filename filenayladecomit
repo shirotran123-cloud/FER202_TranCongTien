@@ -1,0 +1,6 @@
+git init
+git add .
+git status
+git commit -m 'Initial Next.js scaffolding'
+git remote add ori
+git push -u origin main

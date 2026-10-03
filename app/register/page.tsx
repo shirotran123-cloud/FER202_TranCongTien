@@ -5,12 +5,15 @@ import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function RegisterPage() {
+  const { signUp } = useAuth();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [authError, setAuthError] = useState<string | null>(null);
 
   const [errors, setErrors] = useState<{
     fullName?: string;
@@ -28,9 +31,10 @@ export default function RegisterPage() {
       );
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSuccess(false);
+    setAuthError(null);
 
     let newErrors: {
       fullName?: string;
@@ -72,7 +76,12 @@ export default function RegisterPage() {
     setErrors(newErrors);
 
     if (isValid) {
-      setSuccess(true);
+      const { error } = await signUp({ email, password, options: { data: { full_name: fullName } } });
+      if (error) {
+        setAuthError(error.message);
+      } else {
+        setSuccess(true);
+      }
     }
   };
 
@@ -86,9 +95,15 @@ export default function RegisterPage() {
           <p className="text-white/70 text-sm">Join us today</p>
         </div>
 
+        {authError && (
+          <div data-testid="error-auth" className="mb-6 p-4 rounded-lg bg-red-500/20 border border-red-500/50 text-red-100 text-sm text-center font-medium">
+            {authError}
+          </div>
+        )}
+
         {success && (
           <div data-testid="form-success" className="mb-6 p-4 rounded-lg bg-green-500/20 border border-green-500/50 text-green-100 text-sm text-center font-medium">
-            Registration successful (demo)
+            Registration successful
           </div>
         )}
 

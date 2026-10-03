@@ -1,0 +1,171 @@
+Lab 2: Product Listing, Navigation & Form Validation with Next.js
+Class SE20B.NJS  |  Practical exam  |  10 points  |  Deadline: ______________
+1. Objectives
+Extend your Lab 1 project (same GitHub repository, same Vercel project) with a product list Home page, client-side navigation and form validation.
+Practise Tailwind CSS and ShadCN UI, reusable React components, and React state (useState) in Next.js.
+This lab is UI only: no database, API or real authentication is required.
+Important change from Lab 1: the Home page / is now the product list. The login form you built in Lab 1 moves to /login.
+2. Requirements
+2.1 Technical
+Next.js (App Router) with Tailwind CSS. Initialise ShadCN UI (npx shadcn@latest init) so that components.json exists in the project root.
+Use at least two ShadCN components from components/ui/ (for example Button, Card, Input, Label) and import them in your pages/components.
+Forms are client components ("use client") and keep their values and error messages in React state (useState).
+2.2 Home page (route /)
+A header with a Login button and a Register button.
+A product grid with at least 6 products. Each product is shown as a card with: name, image, description and price (currency symbol + number, e.g. $19.99).
+Product data is static: keep the array (or JSON) in a separate file such as data/products.ts (or under lib/), not written inside the JSX.
+Create a reusable component named ProductCard (file components/ProductCard.tsx or .jsx, src/ allowed) and render the list with .map().
+Every product image must load and have an alt text. Keep images in public/ (recommended) or, if remote, configure images.remotePatterns in next.config.
+2.3 Navigation
+Clicking Login goes to /login; clicking Register goes to /register.
+Use client-side navigation (next/link or useRouter). A plain <a href> that reloads the whole page is not accepted.
+2.4 Login (route /login) and Register (route /register) forms
+Add noValidate to the <form> so that your own messages are displayed instead of the browser's built-in pop-ups.
+Validation runs when the user clicks the submit button (or presses Enter). No error is visible when the page first loads. An error disappears once its field is valid.
+When all fields are valid, show a success message (no real login/registration). Use the exact texts and messages in the tables below.
+
+Field
+Rule
+Exact error message
+Login: email
+empty / not a valid email
+Email is required
+Please enter a valid email address
+Login: password
+empty
+Password is required
+Register: full name
+empty or spaces only
+Full name is required
+Register: email
+empty / not a valid email
+Email is required
+Please enter a valid email address
+Register: password
+empty / fewer than 6 characters
+Password is required
+Password must be at least 6 characters
+Register: confirm password
+empty / different from password
+Confirm password is required
+Passwords do not match
+Success message
+all fields valid
+Login: Login successful (demo)
+Register: Registration successful (demo)
+3. Required test hooks (fixed names)
+The lab is graded with an automated browser test. Add the attribute data-testid="..." with exactly these values, and use these exact routes. Elements without them cannot be checked and will score 0 for that item.
+Route
+Element
+data-testid
+/
+Login button / Register button
+btn-login, btn-register
+/
+Product grid container
+product-list
+/
+One product card (repeat per product)
+product-card
+/
+Inside each card
+product-name, product-image (the <img>), product-description, product-price
+/login
+Form, inputs, submit button
+login-form, login-email, login-password, login-submit
+/login
+Error messages, success message
+error-email, error-password, form-success
+/register
+Form, inputs, submit button
+register-form, register-name, register-email, register-password, register-confirm-password, register-submit
+/register
+Error messages, success message
+error-name, error-email, error-password, error-confirm-password, form-success
+Put data-testid on the element that holds the text (for errors) or the input itself (for inputs). Only render an error element when there is an error.
+4. Design
+Any colour palette, but the UI must be clean, consistent and user-friendly. Use a card-based layout for products (ShadCN Card is recommended).
+Responsive: at 375 px width there is no horizontal scrolling and products are in 1 column; at 1280 px width products are in at least 3 columns.
+All product images have the same size/aspect ratio; text does not overflow or overlap.
+5. Submission
+Submit one real Word file (.docx or .doc; not a PDF, and not another format renamed to .docx) named with your student code, e.g. QE200012.docx. Copy this template exactly and write each URL as plain visible text with https://:
+Student Code: QE200012
+Full Name: Nguyen Van A
+GitHub Repository URL: https://github.com/username/repo-name
+Vercel Production URL: https://your-project.vercel.app
+
+Requirements for the two links
+GitHub: the repository is public, the project (with package.json) is at the repository root, and it is the same repository as Lab 1 (keep your Lab 1 commits). Do not commit node_modules or .env files. Do not add .git to the link.
+Vercel: the production domain (https://<project>.vercel.app) of the project connected to that repository. Turn off “Settings → Deployment Protection → Vercel Authentication” so anyone can open the site without logging in.
+The graded version is the repository's default branch and the production site at the deadline. Push and redeploy before submitting.
+Mistakes seen in Lab 1 that cost points
+Giving a vercel.com/... dashboard link instead of the live site, or a Vercel “share” link (?_vercel_share=...), or a deployment link with a random code in the name.
+Hiding the link behind a text such as "Create Next App" or "Sign In", or writing the link without https://.
+Submitting a file that Word cannot open (another format renamed to .docx), or without the student code.
+Private GitHub repository.
+6. Grading (10 points)
+#
+Criterion
+How it is checked
+Points
+1
+Submission & deployment
+0.5: valid .docx named with student code, template fields, plain https:// URLs
+0.5: GitHub repo is public, Next.js project at root (next, react in package.json), Lab 1 history kept
+0.5: Vercel production URL opens the site with no login/password wall
+1.5
+2
+Home: product list
+0.5: product-list has at least 6 product-card
+0.5: every card has name, description and price with currency symbol
+0.5: every card has an image that loads and has alt
+1.5
+3
+Reusable component & data
+0.5: ProductCard in its own file, rendered with .map()
+0.5: product data in a separate file, not inside JSX
+1.0
+4
+Tailwind CSS & ShadCN UI
+0.5: Tailwind installed and used (utility classes in components)
+0.5: components.json + at least 2 files in components/ui/ that are imported and used
+1.0
+5
+Navigation
+0.5: btn-login opens /login
+0.5: btn-register opens /register
+0.5: navigation is client-side (no full page reload)
+1.5
+6
+Login validation
+0.5: empty submit shows both required messages, none before submit
+0.5: invalid email message shown; valid input shows success and clears errors
+1.0
+7
+Register validation
+0.5: empty submit shows all 4 required messages
+0.5: short password and password mismatch messages
+0.5: valid input shows success and clears errors; state kept with useState
+1.5
+8
+Responsive & UI quality
+0.5: at 375 px no horizontal scroll and 1 column; at 1280 px at least 3 columns
+0.5: visual review of screenshots (consistent cards and images, readable text, spacing, no overlap)
+1.0
+
+Total
+
+10.0
+Grading rules
+Behaviour items (2, 5, 6, 7, 8) are tested on the live site. If the site cannot be opened, they are graded from the source code only and receive at most 50% of their points.
+Wrong routes or missing data-testid values make the related check fail. Message texts are compared exactly (case-sensitive).
+Submissions may be compared for code similarity. Copied work receives 0.
+7. Self-check before you submit
+/ shows at least 6 product cards (name, image, description, price) and images are not broken.
+Login and Register buttons on / open /login and /register.
+Submitting empty forms shows the exact messages; nothing is shown when the page first loads.
+Valid inputs show the success message.
+Site looks good at 375 px and 1280 px width; no horizontal scrolling.
+GitHub repo is public and contains your latest code (open it in a private/incognito window).
+Vercel production link opens in an incognito window without asking to log in.
+The .docx follows the template and is named with your student code.

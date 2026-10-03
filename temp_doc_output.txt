@@ -1,0 +1,135 @@
+Lab 3: Global State with useContext & Supabase Authentication
+Class SE20B.NJS  |  Practical exam  |  10 points  |  Deadline: ______________
+1. Objectives
+Extend your Lab 2 project (same GitHub repository, same Vercel project).
+Replace the demo-only Login/Register logic with real authentication backed by Supabase Auth.
+Introduce a React Context (AuthContext) as the single source of truth for who is logged in, and consume it with useContext in at least two different components instead of passing the user down as props.
+Important change from Lab 2: “Login successful (demo)” / “Registration successful (demo)” messages are replaced by a real Supabase account. You also submit one working test account so the app can actually be logged into and graded, not just read as code. The product list, ShadCN UI and Tailwind requirements from Lab 2 still apply and are still graded.
+2. Requirements
+2.1 Create a Supabase project
+Create a free project at supabase.com. In Project Settings → API, copy the Project URL and the anon / public key (never the service_role / secret key — do not put it in your code or your submission).
+Leave email/password sign-up enabled (it is on by default under Authentication → Providers → Email).
+Turn off “Confirm email” in Authentication → Providers → Email (uncheck it and save). With it off, a new account is usable immediately after sign-up instead of waiting for a confirmation email — this is what lets both you and the grader actually log in and test the app.
+Create one throwaway test account in that project (sign up through your own deployed site, or add a user in Authentication → Users). Use a dedicated password for it, not one you reuse elsewhere — it will be shared in your submission.
+2.2 Supabase client
+Install @supabase/supabase-js. Create a single client in its own file, e.g. lib/supabaseClient.ts, built from environment variables NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY. Do not hardcode the keys inline in a component.
+2.3 AuthContext (`useContext`)
+Create contexts/AuthContext.tsx (or context/) that: keeps user, session and loading in state; loads the current session once on mount with supabase.auth.getSession(); keeps them in sync with supabase.auth.onAuthStateChange(...); and exposes signUp(email, password), signIn(email, password) and signOut().
+Wrap the whole app with <AuthProvider> in the root layout (app/layout.tsx) so any page or component can read the auth state.
+Use useContext(AuthContext) (directly, or through your own useAuth() hook that calls useContext internally) in at least two different components — for example the header and the account page. Do not pass the user down through props from page to page — that defeats the point of Context.
+2.4 Register page (`/register`)
+Keep the Lab 2 client-side validation (required fields, password ≥ 6 characters, confirm-password match) and its exact testids/messages.
+On a valid submit, call signUp(email, password) from AuthContext (which calls supabase.auth.signUp), not a fake demo success. Show Supabase's own message when it fails (for example “User already registered”) in an element data-testid="error-auth". On success (with “Confirm email” off, the account is active immediately), show a message in data-testid="form-success", e.g. Registration successful.
+2.5 Login page (`/login`)
+Keep the Lab 2 client-side validation (required fields, valid email format) and its exact testids/messages.
+On a valid submit, call signIn(email, password) from AuthContext (which calls supabase.auth.signInWithPassword). If Supabase rejects the credentials, show its message (for example “Invalid login credentials”) in data-testid="error-auth". On success, redirect to /.
+2.6 Header / navigation — auth-aware
+Logged out: unchanged from Lab 2 — show btn-login and btn-register.
+Logged in: hide those two and instead show the user's email in data-testid="user-email" and a data-testid="btn-logout" button that calls signOut() and returns the header to its logged-out state.
+2.7 A protected page (`/account`)
+Create route /account. While loading is true, render nothing/a spinner. Once loading is done: if there is no user, redirect to /login (router.replace("/login")); if there is a user, render a container data-testid="account-page" showing the user's email in data-testid="account-email".
+2.8 Carried over from Lab 2 (still graded)
+The Home page (/) still shows the product grid (product-list, product-card, etc.) exactly as in Lab 2.
+Tailwind CSS and at least two ShadCN UI components are still used. The layout is still responsive (1 column on mobile, 3+ columns on desktop).
+3. Required test hooks (fixed names)
+All Lab 2 testids and routes stay the same. These are added for Lab 3.
+Route
+Element
+data-testid
+/login
+Supabase error message (invalid credentials, etc.)
+error-auth
+/register
+Supabase error message (duplicate email, etc.)
+error-auth
+/ (header, logged in)
+User's email / logout button
+user-email, btn-logout
+/account
+Page container / user's email
+account-page, account-email
+error-auth is separate from the client-side error-email / error-password testids from Lab 2 — it only appears after Supabase itself rejects the request, not for empty/invalid-format fields.
+4. Submission
+Submit one real Word file (.docx or .doc) named with your student code. Copy this template exactly:
+Student Code: QE200012
+Full Name: Nguyen Van A
+GitHub Repository URL: https://github.com/username/repo-name
+Vercel Production URL: https://your-project.vercel.app
+Supabase Project URL: https://xxxxxxxxxxxx.supabase.co
+Supabase anon (public) key: eyJhbGciOi...
+Test account email: grader.qe200012@example.com
+Test account password: Test1234!
+
+Only the anon/public key. Sharing it is normal and safe — it is the same key your deployed website already sends to every visitor's browser. Never submit the service_role / secret key.
+Same rules as Lab 2 apply to the GitHub and Vercel links: public repo, production URL, no login/share wall.
+The test account must already exist in your Supabase project and be usable immediately — which is exactly what turning off “Confirm email” (section 2.1) gives you. It is used only to call the same sign-in endpoint your own login form calls; nothing is changed, deleted, or read beyond that.
+The Supabase Project URL and anon key are also used on their own to confirm your project exists and email authentication is turned on.
+5. Grading (10 points)
+#
+Criterion
+How it is checked
+Points
+1
+Submission & deployment
+0.25: valid .docx, template filled, plain https:// links
+0.25: GitHub public + Next.js at root; Vercel production URL opens with no wall
+0.5
+2
+Supabase backend, tested for real
+0.5: the project's public auth settings endpoint responds and shows email sign-in enabled
+0.5: the submitted test account can really log in (the real sign-in endpoint accepts its email/password and returns a session)
+0.5: the same account is correctly rejected with the wrong password
+0.5: a fresh throwaway sign-up on the same project is active immediately (confirms “Confirm email” is really off)
+2.0
+3
+Supabase client setup
+0.5: a dedicated client file builds the client from NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY, not hardcoded keys
+0.5
+4
+AuthContext architecture
+1.0: context holds user/session/loading, restores the session with getSession/onAuthStateChange, exposes signUp/signIn/signOut, provider wraps the app
+0.5: session is restored after a refresh (no forced re-login)
+0.5: useContext is used in at least 2 different components, not prop-drilling
+2.0
+5
+Register → real Supabase signUp
+0.5: Lab 2 validation kept
+0.5: calls signUp; shows a real Supabase error/success via error-auth / form-success
+1.0
+6
+Login → real Supabase signIn
+0.5: Lab 2 validation kept
+0.5: calls signIn; shows a real Supabase error via error-auth
+1.0
+7
+Auth-aware header
+0.5: logged-out header unchanged (btn-login/btn-register)
+0.5: logged-in header shows user-email and a working btn-logout
+1.0
+8
+Protected route /account
+1.0: redirects to /login when logged out; shows account-page/account-email when logged in
+1.0
+9
+Lab 2 carried over
+1.0: product list, ShadCN/Tailwind and responsive layout still pass
+1.0
+
+Total
+
+10.0
+Grading rules
+Item 2 is checked against your live Supabase project using its own public sign-in API — the same request your login form sends — with the test account you submit. No dashboard access is used and nothing is created or changed beyond one throwaway test sign-up.
+Items 3–8 depend on client-side JavaScript (Context, redirects, form submission) that a static page fetch cannot run. They are graded from your source code and from the rendered HTML of your Vercel site. Make sure the logic is genuinely implemented, not just described in comments.
+If the test account's password is wrong, the project has “Confirm email” still on, or the account doesn't exist, item 2's live checks score 0 for the parts that depend on it — the rest of the lab is still graded normally.
+Submissions may be compared for code similarity. Copied work receives 0.
+6. Self-check before you submit
+“Confirm email” is turned off in Authentication → Providers → Email, and a brand-new sign-up on your deployed site is usable right away, with no email to click.
+The test account in your submission really exists in this project and its password is exactly what you typed — test it yourself in a private/incognito window right before submitting.
+Logging in with a wrong password on that same account shows a real Supabase error message, not the old demo text.
+After logging in, the header shows your email and a working Logout button; after logging out, Login/Register are back.
+Refreshing the page while logged in keeps you logged in.
+Visiting /account while logged out sends you to /login; visiting it while logged in shows your email.
+useContext is used in at least two components — grep your code for "useContext" to check.
+The Lab 2 product list and responsive layout still work.
+You only pasted the anon/public key, never the service_role key, into the submission.
