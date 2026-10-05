@@ -2,11 +2,11 @@
 
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/contexts/AuthContext";
+import { AuthContext } from "@/contexts/AuthContext";
 import { Header } from "@/components/Header";
 
 export default function AccountPage() {
-  const { user, loading } = useAuth();
+  const { user, loading } = React.useContext(AuthContext)!;
   const router = useRouter();
 
   useEffect(() => {

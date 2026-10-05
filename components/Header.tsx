@@ -4,10 +4,10 @@ import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ShoppingBag } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
+import { AuthContext } from "@/contexts/AuthContext";
 
 export const Header = () => {
-  const { user, signOut } = useAuth();
+  const { user, signOut } = React.useContext(AuthContext)!;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-200/60 bg-white/80 backdrop-blur-md">

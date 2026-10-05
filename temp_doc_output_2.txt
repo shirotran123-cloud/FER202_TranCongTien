@@ -1,0 +1,8 @@
+Student Code: QE200033
+Full Name: Tran Cong Tien
+GitHub Repository URL: https://github.com/shirotran123-cloud/FER202_TranCongTien
+Vercel Production URL: https://fer-202-tran-cong-tien.vercel.app
+Supabase Project URL: https://jwafhqnhcpsnxpwtyzdv.supabase.co
+Supabase anon (public) key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp3YWZocW5oY3Bzbnhwd3R5emR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA5NzIyMDQsImV4cCI6MjEwNjU0ODIwNH0.Vjg2r794KBseruj0VRAbxrzGRY0dexsC8h3VFpZ-12s
+Test account email: tien2@gmail.com
+Test account password: 123456
